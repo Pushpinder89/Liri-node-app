@@ -15,7 +15,7 @@ inquirer
         message: "Would you like to search by concert-this, spotify-this-song,movie-this or do-what-it-says?",
         choices: ["concert-this", "spotify-this-song", "movie-this", "do-what-it-says"]
     }])
-    .then(function (response) {
+        .then(function (response) {
         if (response.choice === "concert-this") {
             inquirer.prompt([{
                     name: "concert",
@@ -38,18 +38,13 @@ inquirer
 
                     });
                 });
-        } else if (response.choice === "spotify-this-song") {
+        }   else if (response.choice === "spotify-this-song") {
             inquirer.prompt([{
                     name: "song",
                     type: "input",
                     message: "What song are you looking for?"
                 }])
                 .then(function (songName) {
-                    // var queryURL = spotify;
-                    // if (songName.song === undefined) {
-                    //     songName.song = "What's my age again";
-                    // }
-
                     spotify.search({
                             type: "track",
                             query: songName
@@ -63,15 +58,43 @@ inquirer
                             var songs = data.tracks.items;
 
                             for (var i = 0; i < songs.length; i++) {
-                              console.log(i);
-                              console.log("artist(s): " + songs[i].artists.map(getArtistNames));
-                              console.log("song name: " + songs[i].name);
-                              console.log("preview song: " + songs[i].preview_url);
-                              console.log("album: " + songs[i].album.name);
-                              console.log("-----------------------------------");
+                                console.log(i);
+                                //   console.log("artist(s): " + songs[i].song.map());
+                                console.log("song name: " + songs[i].name);
+                                console.log("preview song: " + songs[i].preview_url);
+                                console.log("album: " + songs[i].album.name);
+                                console.log("-----------------------------------");
                             }
-                      
+
                         });
                 })
-        }
-    });
+            }
+            else if (response.choice === "movie-this") {
+                inquirer.prompt([{
+                        name: "movie",
+                        type: "input",
+                        message: "What movie are you looking for?"
+                    }])
+                    .then(function (movieName) {
+                        var movieUrl ="http://www.omdbapi.com/?t=" + movieName + "&y=&plot=full&tomatoes=true&apikey=trilogy";
+
+                        request(movieUrl, function(error, body) {
+                            // if (!error && response.statusCode === 200) {
+                                console.log(body);
+                            //   var jsonData = JSON.parse(body);
+                        
+                              console.log("Title: " + body.Title);
+                              console.log("Year: " + body.Year);
+                              console.log("Rated: " + body.Rated);
+                              console.log("Rating: " + body.imdbRating);
+                              console.log("Country: " + body.Country);
+                              console.log("Language: " + body.Language);
+                              console.log("Plot: " + body.Plot);
+                              console.log("Actors: " + body.Actors);
+                            //   console.log("Rotten Tomatoes Rating: " + jsonData.Ratings[1].Value);
+                           // }
+                          });
+                        
+                    })
+                }
+        });
